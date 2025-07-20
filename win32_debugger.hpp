@@ -1,8 +1,11 @@
 #pragma once
-#include "win32_console.hpp"
+// std
 #include <filesystem>
-#include <proc/process>
 #include <sstream>
+
+// lib
+#include <proc/process>
+#include "win32_console.hpp"
 
 namespace fs = std::filesystem;
 
@@ -46,9 +49,7 @@ class debugger {
         PROCESS_INFORMATION pi;
         ZeroMemory(&pi, sizeof(pi));
 
-        if (!CreateProcessW(
-                NULL, &cmd_line[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi
-            ))
+        if (!CreateProcessW(NULL, &cmd_line[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
             return false;
 
         CloseHandle(pi.hThread);
@@ -69,11 +70,8 @@ class debugger {
         __try {
             DebugBreak();
             return true;
-        } __except (
-            GetExceptionCode() == EXCEPTION_BREAKPOINT
-                ? EXCEPTION_EXECUTE_HANDLER
-                : EXCEPTION_CONTINUE_SEARCH
-        ) {
+        } __except (GetExceptionCode() == EXCEPTION_BREAKPOINT ? EXCEPTION_EXECUTE_HANDLER
+                                                               : EXCEPTION_CONTINUE_SEARCH) {
             console->write_line("Error attaching debugger...");
             return false;
         }

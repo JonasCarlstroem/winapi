@@ -1,14 +1,15 @@
 #pragma once
-
-#include "win32_utils.hpp"
+// std
 #include <Windows.h>
 #include <iostream>
 #include <vector>
-#define ConFile(std)                                                           \
-    CreateFile(                                                                \
-        std, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, \
-        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL                       \
-    )
+
+// lib
+#include "win32_utils.hpp"
+
+#define ConFile(std)                                                                               \
+    CreateFile(std, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,        \
+               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)
 
 namespace winapi {
 
@@ -22,15 +23,15 @@ class _console {
         std::cout << msg;
     }
 
-    static inline void write_line(std::string msg) {
-        std::cout << msg << std::endl;
-    }
+    static inline void write_line(std::string msg) { std::cout << msg << std::endl; }
 
-    template <typename... T> static inline void write(T&... args) {
+    template <typename... T>
+    static inline void write(T&... args) {
         ((std::cout << args), ...);
     }
 
-    template <typename... T> void write_line(T&... args) {
+    template <typename... T>
+    void write_line(T&... args) {
         ((std::cout << args), ...);
         std::cout << std::endl;
     }
@@ -49,11 +50,13 @@ class _console {
     static inline void error(std::string msg);
     static inline void error_line(std::string msg);
 
-    template <typename... T> void error(T&... args) {
+    template <typename... T>
+    void error(T&... args) {
         ((std::cerr << args), ...);
     }
 
-    template <typename... T> void error_line(T&... args) {
+    template <typename... T>
+    void error_line(T&... args) {
         ((std::cerr << args), ...);
         std::cerr << std::endl;
     }
@@ -78,12 +81,11 @@ class _console {
     }
 
   private:
-    static inline bool initialized_   = false;
-    static inline _console* instance_ = nullptr;
+    static inline bool initialized_                                       = false;
+    static inline _console* instance_                                     = nullptr;
 
-    static inline std::vector<std::reference_wrapper<std::ios>> channels_ = {
-        std::cout, std::clog, std::cerr, std::cin
-    };
+    static inline std::vector<std::reference_wrapper<std::ios>> channels_ = {std::cout, std::clog,
+                                                                             std::cerr, std::cin};
 
     _console() {
         if (!create_console()) {

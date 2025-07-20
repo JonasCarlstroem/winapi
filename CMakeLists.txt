@@ -7,4 +7,13 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_library(winapi INTERFACE)
 
+install(TARGETS winapi
+		EXPORT libTargets
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib
+		RUNTIME DESTINATION bin
+		INCLUDES DESTINATION include)
+
+install(DIRECTORY include/ DESTINATION include)
+
 set(LIB_TARGETS winapi PARENT_SCOPE)
