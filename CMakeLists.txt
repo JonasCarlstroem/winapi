@@ -5,15 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 
-add_library(winapi INTERFACE)
+#add_library(winapi INTERFACE)
+CREATE_LIB(winapi INTERFACE)
 
-install(TARGETS winapi
-		EXPORT libTargets
-		LIBRARY DESTINATION lib
-		ARCHIVE DESTINATION lib
-		RUNTIME DESTINATION bin
-		INCLUDES DESTINATION include)
+target_compile_features(winapi INTERFACE cxx_std_17)
 
-install(DIRECTORY include/ DESTINATION include)
+target_include_directories(winapi INTERFACE 
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:include/winapi>
+)
 
-set(LIB_TARGETS winapi PARENT_SCOPE)
+INSTALL_LIB(winapi True winapi)

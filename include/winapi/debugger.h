@@ -4,8 +4,8 @@
 #include <sstream>
 
 // lib
-#include <proc/process>
-#include "win32_console.hpp"
+#include <proc/process.h>
+#include "console.h"
 
 namespace fs = std::filesystem;
 
